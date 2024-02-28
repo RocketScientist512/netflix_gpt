@@ -21,4 +21,3 @@
 - Netflix GPT
     - Search bar
     - Movie Suggestions
-# netflix_gpt
