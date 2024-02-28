@@ -27,3 +27,7 @@
 - Netflix GPT
     - Search bar
     - Movie Suggestions
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1c80e702620556e0ff8f33274edb790a373a9733
