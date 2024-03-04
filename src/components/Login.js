@@ -2,7 +2,10 @@ import React, {useRef, useState} from 'react'
 import Header from './Header';
 import { checkValidData } from '../utils/validate';
 import { auth } from '../utils/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile  } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../utils/userSlice';
 
 
 
@@ -12,6 +15,8 @@ const Login = () => {
     //we are declaring a state variable to help the sign in form become a sign up form
 
     const [errorMessage, setErrorMessage] = useState();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const email = useRef(null);
     //this will store the email entered by user in the form.
@@ -28,7 +33,7 @@ const Login = () => {
         //validate the form data. 
         console.log(email.current.value); 
         console.log(password.current.value);
-        
+        //console.log(name.current.value);
 
         const message = checkValidData(email.current.value,password.current.value);
         setErrorMessage(message);
@@ -49,7 +54,31 @@ const Login = () => {
                 .then((userCredential) => {
                     // Signed up 
                     const user = userCredential.user;
+                    updateProfile(user, {
+                        displayName: name.current.value, 
+                        photoURL: "https://avatars.githubusercontent.com/u/20492049?v=4",
+                      })
+                      .then(() => {
+                        // Profile updated!
+                        // ...
+                        const {uid, email, displayName, photoURL} = auth.currentUser;
+                        dispatch(
+                            addUser({
+                                uid: uid, 
+                                email: email, 
+                                displayName: displayName, 
+                                photoURL: photoURL,
+                                })
+                            );
+                        navigate("/browse");
+                      }).catch((error) => {
+                        // An error occurred
+                        // ...
+                        setErrorMessage(errorMessage);
+                      });                      
+
                     console.log(user); 
+                    navigate("/browse");
                     // ...
                 })
                 .catch((error) => {
@@ -57,6 +86,9 @@ const Login = () => {
                     const errorMessage = error.message;
                     setErrorMessage(errorCode + " - "+ errorMessage);
                     // ..
+                    console.log("Error while creating user - " + errorCode + " - "+ errorMessage);
+                    console.log(name.current.value);
+                    console.log(password);
                 });
 
 
@@ -71,6 +103,7 @@ const Login = () => {
                     const user = userCredential.user;
                     console.log(user);
                     // will take user to the /browse page once success
+                    navigate("/browse");
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -87,11 +120,18 @@ return(
     <div>
         <Header/>
         <div className='absolute'>
-        <img src="https://assets.nflxext.com/ffe/siteui/vlv3/2e07bc25-8b8f-4531-8e1f-7e5e33938793/e4b3c14a-684b-4fc4-b14f-2b486a4e9f4e/IN-en-20240219-popsignuptwoweeks-perspective_alpha_website_small.jpg" alt="logo"/>
+            <img src="https://assets.nflxext.com/ffe/siteui/vlv3/2e07bc25-8b8f-4531-8e1f-7e5e33938793/e4b3c14a-684b-4fc4-b14f-2b486a4e9f4e/IN-en-20240219-popsignuptwoweeks-perspective_alpha_website_small.jpg" alt="logo"/>
         </div>
-        <form onSubmit={(e) => e.preventDefault()} className='w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80'>
-            <h1 className='font-bold text-3xl py-4'>{isSignInForm ? "Sign In" : "Sign Up"}</h1>
-            {!isSignInForm && <input type="text" placeholder='Full Name' className='p-2 my-4 w-full bg-gray-700' />}
+        <form 
+            onSubmit={(e) => e.preventDefault()} 
+            className='w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80'
+        >
+            <h1 className='font-bold text-3xl py-4'>
+                {isSignInForm ? "Sign In" : "Sign Up"}
+            </h1>
+
+            {!isSignInForm && (
+            <input ref={name} type="text" placeholder='Full Name' className='p-2 my-4 w-full bg-gray-700' />)}
             <input ref={email} type="text" placeholder='Email Address' className='p-2 my-4 w-full bg-gray-700' />
             <input ref={password} type="password" placeholder='Password' className='p-2 my-4 w-full bg-gray-700' />
             <p className='text-red-500 font-bold text-lg'>{errorMessage}</p>
