@@ -6,7 +6,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfi
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
-
+import { AVATAR } from '../utils/constants';
 
 
 const Login = () => {
@@ -56,7 +56,7 @@ const Login = () => {
                     const user = userCredential.user;
                     updateProfile(user, {
                         displayName: name.current.value, 
-                        photoURL: "https://avatars.githubusercontent.com/u/20492049?v=4",
+                        photoURL: AVATAR ,
                       })
                       .then(() => {
                         // Profile updated!
@@ -70,7 +70,7 @@ const Login = () => {
                                 photoURL: photoURL,
                                 })
                             );
-                        navigate("/browse");
+                        //navigate("/browse");
                       }).catch((error) => {
                         // An error occurred
                         // ...
@@ -78,7 +78,7 @@ const Login = () => {
                       });                      
 
                     console.log(user); 
-                    navigate("/browse");
+                    //navigate("/browse");
                     // ...
                 })
                 .catch((error) => {
