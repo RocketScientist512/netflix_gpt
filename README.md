@@ -30,7 +30,9 @@
 - Update store with Trailer video data
 - Embedded the Youtube video & make it autoplay and mute. 
 - Added tailwind classes to make the Main container YT video look good. 
-- Build secondary component
+- Built secondary component
+- Built Movie Card
+- Using GPT to build a movie recommendation system
 
 
 # Features we are going to build
