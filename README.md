@@ -33,6 +33,10 @@
 - Built secondary component
 - Built Movie Card
 - Using GPT to build a movie recommendation system
+- GPT Search page
+- GPT Search bar
+- (BONUS) Added a multi-lingual language feature in the app
+- Integrate GPT APIs, get our key
 
 
 # Features we are going to build

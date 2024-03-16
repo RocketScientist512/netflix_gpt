@@ -4,13 +4,16 @@ import { auth } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUser, removeUser } from '../utils/userSlice';
-import { LOGO } from '../utils/constants';
+import { LOGO, Supported_Languages } from '../utils/constants';
 import { toggleGptSearchView } from '../utils/gptSlice';
+import { changeLanguage } from '../utils/configSlice';
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(store => store.user);
+  //ensuring that the language bar only shows when someone clicks on GPT Search
+  const showGptSearch=useSelector((store)=>store.gpt.showGptSearch);
   const handleSignOut = () =>{
     signOut(auth).then(() => {
       // Sign-out successful.
@@ -62,11 +65,27 @@ const handleGptSearchClick = () =>{
   dispatch(toggleGptSearchView());
 }
 
+const handleLanguageChange = (e) =>{
+  // console.log(e.target.value); this is to see if the language is correctly being collected or not
+  dispatch(changeLanguage(e.target.value));
+}
+
   return (
     <div className='absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex justify-between'>
         <img className="w-44" src={LOGO} alt = "Logo"/>
         {user && <div className="flex p-2">
-          <button className='py-2 px-4 mx-4 my-1 bg-purple-800 text-white rounded-lg' onClick={handleGptSearchClick}>GPT Search</button>
+        {showGptSearch && <select className='p-2 m-2 bg-gray-900 text-white' onChange={handleLanguageChange}>
+              {/* Fetching data for languages from constant.js because we created an export there */}
+              {Supported_Languages.map( (lang) => (<option key={lang.identifier} value={lang.identifier} >{lang.name}</option>))}
+              {/* <option value="english">English</option>
+              <option value="hindi">Hindi</option>
+              <option value="spanish">Spanish</option> */}
+
+              {/* To modify the language on the page as well , we need to manage this via REDUX store */}
+            </select>}
+          <button className='py-2 px-4 mx-4 my-1 bg-purple-800 text-white rounded-lg' onClick={handleGptSearchClick}>
+            {showGptSearch ? "Homepage" : "GPT Search" }
+          </button>
           <img className="w-11 h-11" alt="user icon" src={user?.photoURL} /> 
           <button onClick={handleSignOut} className='font-bold text-white'>(Sign out)</button>
         </div>}
