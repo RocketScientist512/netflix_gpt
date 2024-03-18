@@ -37,6 +37,7 @@
 - GPT Search bar
 - (BONUS) Added a multi-lingual language feature in the app
 - Integrate GPT APIs, get our key
+- Added responsive features to the website, however it only works for Desktop & Mobile right now
 
 
 # Features we are going to build
