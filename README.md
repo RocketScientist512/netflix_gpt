@@ -54,3 +54,7 @@
 - Netflix GPT
     - Search bar
     - Movie Suggestions
+
+
+    # Additional points
+    - You need to create a constants file in the application that will store necessary API Keys that would be required for pulling data from different sources (TMDB, OPEN AI).    

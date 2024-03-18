@@ -7,6 +7,7 @@ import { addTrailerVideo } from "../utils/movieSlice";
 const useMovieTrailer = (movieId) =>{
     console.log("The movie id is " + movieId);
     const dispatch = useDispatch();
+
     //fetch trailer here via API call. For that, I need the movie id. 
     const trailerVideo = useSelector((store) => store.movies.trailerVideo);
 
